@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 use App\Models\Employee;
 
 class Contact extends Model
@@ -13,7 +15,7 @@ class Contact extends Model
     
 
     protected $table = 'contacts';
-    protected $fillable = ['contact', 'type'];
+    protected $fillable = ['employee_id', 'contact', 'type'];
 
     public function employee():BelongsTo
     {

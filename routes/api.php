@@ -4,6 +4,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\ContractController;
+use App\Http\Controllers\NextOfKinController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,4 +32,28 @@ Route::post('/employee/create', [EmployeeController::class, 'createEmployee']);
 Route::put('/employee/update/{id}', [EmployeeController::class, 'updateEmployee']);
 Route::get('/employees', [EmployeeController::class, 'getAll']);
 Route::get('/employee/{id}', [EmployeeController::class, 'show']);
+
+
 Route::delete('/employee/{id}', [EmployeeController::class, 'destroy']);
+
+
+
+Route::post('/contact/{id}/create',[ContactController::class, 'store']);
+Route::get('/contacts', [ContactController::class, 'index']);
+Route::put('/contact/{id}', [ContactController::class, 'update']);
+Route::get('/employee/{id}/contacts', [ContactController::class, 'getContacts']);
+
+
+
+Route::post('/contract/{id}/create',[ContractController::class, 'store']);
+Route::get('/contracts', [ContractController::class, 'index']);
+Route::put('/contract/{id}', [ContractController::class, 'update']);
+Route::get('/employee/{id}/contracts', [ContractController::class, 'getContracts']);
+
+
+
+
+Route::post('/kin/{id}/create',[NextOfKinController::class, 'store']);
+Route::get('/kins', [NextOfKinController::class, 'index']);
+Route::put('/kin/{id}', [NextOfKinController::class, 'update']);
+Route::get('/employee/{id}/kins', [NextOfKinController::class, 'getKins']);

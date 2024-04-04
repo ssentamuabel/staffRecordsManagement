@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\Contact;
 use App\Models\Referees;
 use App\Models\Hobby;
-use App\Models\Contracts;
+use App\Models\Contract;
 use App\Models\NextOfKin;
 use App\Models\Leaves;
 
@@ -33,10 +34,10 @@ class Employee extends Model
 
     public function contracts():HasMany
     {
-        return $this->hasMany(Contracts::class);
+        return $this->hasMany(Contract::class);
     }
 
-    public function next_of_kin():HasMany
+    public function next_of_kins():HasMany
     {
         return $this->hasMany(NextOfKin::class);
     }
