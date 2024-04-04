@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Models\NextOfKin;
+use App\Models\Referees;
 use App\Models\Employee;
 
-class NextOfKinController extends Controller
+class RefereesController extends Controller
 {
     //
     public function store(Request $request, $id){
@@ -17,11 +17,13 @@ class NextOfKinController extends Controller
 
 
 
-            $validator = Validator::make($request->all(), [                
+            $validator = Validator::make($request->all(), [
                 
-                'name' => 'required',
-                'contact' => 'required',
-                'relationship' => 'required'
+                'names' => 'required',
+                'proffession' => 'required',
+                'position_of_influence' => 'required',
+                'contact' => 'required'
+
             ]);
 
             if ($validator->fails())
@@ -34,21 +36,22 @@ class NextOfKinController extends Controller
             }
             
 
-            $nextofkin = NextOfKin::create([
+            $referees = Referees::create([
                 'employee_id' => $employee->id,
-                'name' => $request->name,
+                'names' => $request->names,
+                'title' => $request->proffession,
+                'relation' => $request->position_of_influence,
                 'contact' => $request->contact,
-                'relationship' => $request->relationship
+                
                 
             ]);
 
-            
-            $nextofkin->save();
+            $employee->referees()->save($referees);
 
         
             return response()->json([
                 'status' => true,
-                'message' => "Kin created  successfully",
+                'message' => "Referee created successfully",
 
             ], 200);
 
@@ -65,11 +68,13 @@ class NextOfKinController extends Controller
         try{
 
 
-            $validator = Validator::make($request->all(), [                
+            $validator = Validator::make($request->all(), [
                 
-                'name' => 'required',
-                'contact' => 'required',
-                'relationship' => 'required'
+                'names' => 'required',
+                'proffession' => 'required',
+                'position_of_influence' => 'required',
+                'contact' => 'required'
+
             ]);
 
             if ($validator->fails())
@@ -81,16 +86,17 @@ class NextOfKinController extends Controller
                 ], 401);
             }
 
-            if (NextOfKin::where('id', $id)->exists()){
 
-                $kin = NextOfKin::find($id);
+            if (Referees::where('id', $id)->exists()){
 
-                $kin->name = $request->name;
-                $kin->contact = $request->contact;
-                $kin->relationship = $request->relationship;
-                
+                $referee = Referees::find($id);
 
-                $kin->update();
+                $referee->names = $request->names;
+                $referee->title = $request->proffession;
+                $referee->relation = $request->position_of_influence;
+                $referee->contact = $request->contact;
+
+                $referee->update();
 
                 return response()->json([
                     'status' => true,
@@ -112,16 +118,17 @@ class NextOfKinController extends Controller
         }
     }
 
+
     public function index(){
 
 
         try{
 
-            $kins = NextOfKin::with('employee')->get();
+            $referees = Referees::with('employee')->get();
 
             return response()->json([
                 'status'=> true,
-                'Next Of Kins' => $kins
+                'referees' => $referees
 
             ]);
 
@@ -137,19 +144,17 @@ class NextOfKinController extends Controller
         
     }
 
-    public function getKins($id){
+    public function getReferees($id){
         try{
 
             $employee = Employee::findOrFail($id);
 
-            $kins = $employee->next_of_kins;
+            $referees = $employee->referees;
 
-            // $value = count($kins);
        
             return response()->json([
                 'status' => true,
-                'kins' => $kins,
-                
+                'referees' => $referees
             ]);             
                 
         
@@ -161,5 +166,4 @@ class NextOfKinController extends Controller
             ]);
         }
     }
-
 }

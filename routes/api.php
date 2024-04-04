@@ -7,6 +7,9 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\NextOfKinController;
+use App\Http\Controllers\RefereesController;
+use App\Http\Controllers\LeavesController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -57,3 +60,17 @@ Route::post('/kin/{id}/create',[NextOfKinController::class, 'store']);
 Route::get('/kins', [NextOfKinController::class, 'index']);
 Route::put('/kin/{id}', [NextOfKinController::class, 'update']);
 Route::get('/employee/{id}/kins', [NextOfKinController::class, 'getKins']);
+
+
+
+Route::post('/referee/{id}/create',[RefereesController::class, 'store']);
+Route::get('/referees', [RefereesController::class, 'index']);
+Route::put('/referee/{id}', [RefereesController::class, 'update']);
+Route::get('/employee/{id}/referees', [RefereesController::class, 'getReferees']);
+
+
+
+Route::post('/leave/{id}/create',[LeavesController::class, 'store']);
+Route::get('/leaves', [LeavesController::class, 'index']);
+Route::put('/leave/{id}', [LeavesController::class, 'update']);
+Route::get('/employee/{id}/leaves', [LeavesController::class, 'getLeaves']);

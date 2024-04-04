@@ -76,7 +76,7 @@ class ContactController extends Controller
 
         }catch(\Throwable $th){
             return response()->json([
-                'status' => true,
+                'status' => false,
                 'message' => $th->getMessage()
             ]);
         }
@@ -128,7 +128,7 @@ class ContactController extends Controller
 
         }catch(\Throwable $th){
             return response()->json([
-                'status' => true,
+                'status' => false,
                 'message' => $th->getMessage()
             ]);
         }
@@ -152,7 +152,7 @@ class ContactController extends Controller
 
         }catch(\Throwable $th){
             return response()->json([
-                'status' => true,
+                'status' => false,
                 'message' => $th->getMessage()
             ]);
         }

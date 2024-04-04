@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Models\NextOfKin;
+use App\Models\Leaves;
 use App\Models\Employee;
 
-class NextOfKinController extends Controller
+class LeavesController extends Controller
 {
     //
     public function store(Request $request, $id){
@@ -17,11 +17,13 @@ class NextOfKinController extends Controller
 
 
 
-            $validator = Validator::make($request->all(), [                
+            $validator = Validator::make($request->all(), [
                 
-                'name' => 'required',
-                'contact' => 'required',
-                'relationship' => 'required'
+                'leave_date' => 'required',
+                'return_date' => 'required',
+                'status' => 'required',
+                'year' => 'required',
+               
             ]);
 
             if ($validator->fails())
@@ -34,21 +36,21 @@ class NextOfKinController extends Controller
             }
             
 
-            $nextofkin = NextOfKin::create([
-                'employee_id' => $employee->id,
-                'name' => $request->name,
-                'contact' => $request->contact,
-                'relationship' => $request->relationship
+            $leave = Leaves::create([
+                'employee_id' => $employee->id,              
+                'leave_date' => $request->leave_date,
+                'return_date' =>$request->return_date,
+                'status' => $request->status,
+                'year' => $request->year,
                 
             ]);
 
-            
-            $nextofkin->save();
+            $employee->leaves()->save($leave);
 
         
             return response()->json([
                 'status' => true,
-                'message' => "Kin created  successfully",
+                'message' => "Leave created successfully",
 
             ], 200);
 
@@ -59,17 +61,39 @@ class NextOfKinController extends Controller
             ], 500);
         }
     }
+    public function index(){
+        try{
+
+            $leaves = Leaves::with('employee')->get();
+
+            return response()->json([
+                'status'=> true,
+                'leaves' => $leaves
+
+            ]);
+
+
+
+        }catch(\Throwable $th){
+            return response()->json([
+                'status' => false,
+                'message' => $th->getMessage()
+            ]);
+        }        
+    }
 
 
     public function update(Request $request, $id){
         try{
 
 
-            $validator = Validator::make($request->all(), [                
+            $validator = Validator::make($request->all(), [
                 
-                'name' => 'required',
-                'contact' => 'required',
-                'relationship' => 'required'
+                'leave_date' => 'required',
+                'return_date' => 'required',
+                'status' => 'required',
+                'year' => 'required',
+               
             ]);
 
             if ($validator->fails())
@@ -81,16 +105,16 @@ class NextOfKinController extends Controller
                 ], 401);
             }
 
-            if (NextOfKin::where('id', $id)->exists()){
+            if (Leaves::where('id', $id)->exists()){
 
-                $kin = NextOfKin::find($id);
+                $leave = Leaves::find($id);
 
-                $kin->name = $request->name;
-                $kin->contact = $request->contact;
-                $kin->relationship = $request->relationship;
-                
+                $leave->leave_date = $request->leave_date;
+                $leave->return_date = $request->return_date;
+                $leave->status = $request->status;                
+                $leave->year = $request->year;
 
-                $kin->update();
+                $leave->update();
 
                 return response()->json([
                     'status' => true,
@@ -99,7 +123,7 @@ class NextOfKinController extends Controller
             }else{
                 return response()->json([
                     'status' => false,
-                    'message' => 'Contact Doesnot exist'
+                    'message' => 'Leave Doesnot exist'
                 ], 401);
             }
 
@@ -112,44 +136,17 @@ class NextOfKinController extends Controller
         }
     }
 
-    public function index(){
-
-
-        try{
-
-            $kins = NextOfKin::with('employee')->get();
-
-            return response()->json([
-                'status'=> true,
-                'Next Of Kins' => $kins
-
-            ]);
-
-
-
-        }catch(\Throwable $th){
-            return response()->json([
-                'status' => false,
-                'message' => $th->getMessage()
-            ]);
-        }
-
-        
-    }
-
-    public function getKins($id){
+    public function getLeaves($id){
         try{
 
             $employee = Employee::findOrFail($id);
 
-            $kins = $employee->next_of_kins;
+            $leaves = $employee->leaves;
 
-            // $value = count($kins);
        
             return response()->json([
                 'status' => true,
-                'kins' => $kins,
-                
+                'leaves' => $leaves
             ]);             
                 
         
